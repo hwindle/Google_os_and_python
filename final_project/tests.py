@@ -1,5 +1,5 @@
 import unittest
-import ticky_check
+from ticky_check import *
 
 class Ticky(unittest.TestCase):
 
