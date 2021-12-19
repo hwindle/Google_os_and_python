@@ -25,11 +25,16 @@ def info_processing(file_contents):
 
     for line in file_contents:
         # search for info or error
+        user = re.findall(r'\([a-zA-Z ]*\)$', line.strip())
         if re.search(info_pattern, line) != None:
             # Info line
-            user = re.find(r'\([\w*]\)$', line.strip())
+            print('info')
+            print(user)
+        else:
+            print('error')
             #per_user[user] =+ 1
             print(user)
+    return {}
 
 
 def error_processing(file_contents):
@@ -41,7 +46,7 @@ def error_processing(file_contents):
     error_pattern = r'ERROR ([\w ]*) \('
     for line in file_contents:
         if re.search(error_pattern, line) != None:
-            error_text = re.find(error_pattern, line.strip())
+            error_text = re.findall(error_pattern, line.strip())
             print(error_text)
 
 def user_csv_generator(per_user):
@@ -52,14 +57,15 @@ def error_csv_generator(error):
 
 
 if __name__ == '__main__':
+    if sys.argv[1] != None:
+        file_contents = get_data()
+        per_user = info_processing(file_contents)
     try:
-        if sys.argv[1] != None:
-            file_contents = get_data()
-            #per_user = info_processing(file_contents)
+        pass
             #error = error_processing(file_contents)
             #user_csv_generator(per_user)
             #error_csv_generator(error)
-        else:
-            print('Pass in an arguement for the log file')
+
     except:
-        sys.exit('Please provide a file argument')
+        pass
+        #sys.exit('Please provide a file argument')
