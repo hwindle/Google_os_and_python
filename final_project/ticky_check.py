@@ -61,10 +61,27 @@ def error_processing(file_contents):
     return sorted(error.items(), key = operator.itemgetter(1), reverse = True)
 
 def user_csv_generator(per_user):
-    pass
+    filename = 'user_statistics.csv'
+    headers = ['User', 'INFO', 'ERROR']
+    with open(filename, 'w', newline = '\n') as f:
+        user_writer = csv.writer(f, delimiter = ',')
+        user_writer.writerow(headers)
+        for row in per_user:
+            row_list = []
+            row_list.append(row[0])
+            row_list.append(row[1]['INFO'])
+            row_list.append(row[1]['ERROR'])
+            user_writer.writerow(row_list)
+
 
 def error_csv_generator(error):
-    pass
+    filename = 'error_message.csv'
+    headers = ['Error', 'Count']
+    with open(filename, 'w', newline = '\n') as f:
+        error_writer = csv.writer(f, delimiter = ',')
+        error_writer.writerow(headers)
+        for row in error:
+            error_writer.writerow(row)
 
 
 if __name__ == '__main__':
