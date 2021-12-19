@@ -46,12 +46,19 @@ def error_processing(file_contents):
         Outputs error dict of most common error messages with most common first.
     """
     error = {}
+    error_text = ''
+    error_clean = ''
     error_pattern = r'ERROR ([\w ]*) \('
     for line in file_contents:
-        if re.search(error_pattern, line) != None:
-            error_text = re.findall(error_pattern, line.strip())
-            print(error_text)
-    return error
+        error_text = re.findall(error_pattern, line.strip())
+        for one_error in error_text:
+            error_clean = one_error.strip()
+        if error_clean not in error:
+            error[error_clean] = 1 # initialise dictionary key
+        else:
+            error[error_clean] = error[error_clean] + 1 #  increment
+    del error['']
+    return sorted(error.items(), key = operator.itemgetter(1), reverse = True)
 
 def user_csv_generator(per_user):
     pass
@@ -63,15 +70,10 @@ def error_csv_generator(error):
 if __name__ == '__main__':
     if sys.argv[1] != None:
         file_contents = get_data()
-        #per_user = info_processing(file_contents)
+        per_user = info_processing(file_contents)
         error = error_processing(file_contents)
-        print(error)
-    try:
-        pass
-            #
-            #user_csv_generator(per_user)
-            #error_csv_generator(error)
-
-    except:
-        pass
-        #sys.exit('Please provide a file argument')
+        user_csv_generator(per_user)
+        error_csv_generator(error)
+        print('Success!')
+    else:
+        sys.exit('Please provide a file argument')
